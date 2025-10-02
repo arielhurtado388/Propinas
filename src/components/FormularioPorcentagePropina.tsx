@@ -1,4 +1,5 @@
-import type { Dispatch, SetStateAction } from "react";
+import type { Dispatch } from "react";
+import type { OrdenAcciones } from "../reducers/orden-reducer";
 
 const opcionesPropina = [
   {
@@ -19,12 +20,12 @@ const opcionesPropina = [
 ];
 
 type FormularioPorcentagePropinaProps = {
-  setPropina: Dispatch<SetStateAction<number>>;
+  dispatch: Dispatch<OrdenAcciones>;
   propina: number;
 };
 
 export default function FormularioPorcentagePropina({
-  setPropina,
+  dispatch,
   propina,
 }: FormularioPorcentagePropinaProps) {
   return (
@@ -40,7 +41,12 @@ export default function FormularioPorcentagePropina({
               type="radio"
               name="tip"
               value={opcion.value}
-              onChange={(e) => setPropina(+e.target.value)}
+              onChange={(e) =>
+                dispatch({
+                  type: "agregar-propina",
+                  payload: { value: +e.target.value },
+                })
+              }
               checked={opcion.value === propina}
             />
           </div>

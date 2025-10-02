@@ -1,16 +1,17 @@
-import { useMemo } from "react";
+import { useMemo, type Dispatch } from "react";
 import type { ItemOrden } from "../types";
 import { formatearMoneda } from "../helpers";
+import type { OrdenAcciones } from "../reducers/orden-reducer";
 
 type ResumenOrdenProps = {
   orden: ItemOrden[];
   propina: number;
-  guardarOrden: () => void;
+  dispatch: Dispatch<OrdenAcciones>;
 };
 export default function ResumenOrden({
   orden,
   propina,
-  guardarOrden,
+  dispatch,
 }: ResumenOrdenProps) {
   const montoSubtotal = useMemo(
     () => orden.reduce((total, item) => total + item.quantity * item.price, 0),
@@ -42,7 +43,7 @@ export default function ResumenOrden({
       <button
         className="w-full bg-black p-3 uppercase text-white font-bold mt-10 disabled:opacity-10 cursor-pointer"
         disabled={total === 0 ? true : false}
-        onClick={guardarOrden}
+        onClick={() => dispatch({ type: "guardar-orden" })}
       >
         Guardar Orden
       </button>

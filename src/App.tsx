@@ -2,18 +2,12 @@ import Item from "./components/Item";
 import ContenidoOrden from "./components/ContenidoOrden";
 import ResumenOrden from "./components/ResumenOrden";
 import { menuItems } from "./data/db";
-import useOrden from "./hooks/useOrden";
 import FormularioPorcentagePropina from "./components/FormularioPorcentagePropina";
+import { useReducer } from "react";
+import { estadoInicial, ordenReducer } from "./reducers/orden-reducer";
 
 function App() {
-  const {
-    orden,
-    propina,
-    setPropina,
-    agregarItem,
-    eliminarItem,
-    guardarOrden,
-  } = useOrden();
+  const [state, dispatch] = useReducer(ordenReducer, estadoInicial);
   return (
     <>
       <header className="bg-amber-400 py-5">
@@ -27,23 +21,27 @@ function App() {
           <h2 className="text-4xl font-black">Menú</h2>
           <div className="space-y-3 mt-10">
             {menuItems.map((item) => (
-              <Item key={item.id} item={item} agregarItem={agregarItem} />
+              <Item
+                key={item.id}
+                item={{ ...item, quantity: 1 }}
+                dispatch={dispatch}
+              />
             ))}
           </div>
         </div>
 
         <div className="border border-dashed border-slate-300 p-5 rounded-lg space-y-10">
-          {orden.length ? (
+          {state.orden.length ? (
             <>
-              <ContenidoOrden orden={orden} eliminarItem={eliminarItem} />
+              <ContenidoOrden orden={state.orden} dispatch={dispatch} />
               <FormularioPorcentagePropina
-                setPropina={setPropina}
-                propina={propina}
+                dispatch={dispatch}
+                propina={state.propina}
               />
               <ResumenOrden
-                orden={orden}
-                propina={propina}
-                guardarOrden={guardarOrden}
+                orden={state.orden}
+                propina={state.propina}
+                dispatch={dispatch}
               />
             </>
           ) : (

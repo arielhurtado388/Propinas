@@ -1,14 +1,16 @@
+import type { Dispatch } from "react";
 import { formatearMoneda } from "../helpers";
+import type { OrdenAcciones } from "../reducers/orden-reducer";
 import type { Item, ItemOrden } from "../types";
 
 type ContenidoOrdenProps = {
   orden: ItemOrden[];
-  eliminarItem: (id: Item["id"]) => void;
+  dispatch: Dispatch<OrdenAcciones>;
 };
 
 export default function ContenidoOrden({
   orden,
-  eliminarItem,
+  dispatch,
 }: ContenidoOrdenProps) {
   return (
     <div>
@@ -31,7 +33,9 @@ export default function ContenidoOrden({
             </div>
             <button
               className="bg-red-600 h-8 w-8 rounded-full text-white font-black cursor-pointer"
-              onClick={() => eliminarItem(item.id)}
+              onClick={() =>
+                dispatch({ type: "eliminar-item", payload: { id: item.id } })
+              }
             >
               X
             </button>
